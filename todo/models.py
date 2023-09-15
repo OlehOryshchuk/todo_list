@@ -14,6 +14,7 @@ class Task(models.Model):
     deadline = models.DateField(
         help_text="Enter the deadline for this task.",
     )
+    created_at = models.DateField(auto_now_add=True)
     is_completed = models.BooleanField(default=False)
     tags = models.ManyToManyField(
         Tag,
