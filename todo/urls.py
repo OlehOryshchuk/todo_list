@@ -8,6 +8,6 @@ from .views import (
 )
 
 urlpatterns = [
-    path("/", TaskListView, name="index")
+    path("/", TaskListView, name="task-list")
 ]
 app_name = "todo"
