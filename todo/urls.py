@@ -1,13 +1,13 @@
 from django.urls import path
 
 from .views import (
-    index,
+    TaskListView,
     TaskCreateView,
     TaskUpdateView,
     TaskDeleteView
 )
 
 urlpatterns = [
-    path("/", index, name="index")
+    path("/", TaskListView, name="index")
 ]
 app_name = "todo"
