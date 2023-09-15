@@ -5,6 +5,7 @@ from .models import Task, Tag
 
 admin.site.unregister(Group)
 
+
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     search_fields = ["name"]
