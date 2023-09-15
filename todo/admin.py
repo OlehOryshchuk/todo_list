@@ -14,6 +14,7 @@ class TaskAdmin(admin.ModelAdmin):
         "name",
         "description",
         "deadline",
+        "created_at",
         "is_completed",
     ]
 
