@@ -28,13 +28,19 @@
 								href="{% url 'todo:task-list' %}?is_completed=True&task={{ task.id }}"
 								class="btn btn-success"
 							>
-
 								Complete</a>
 					</div>
 				{% endif %}
 				<h5>{{ task.description }}</h5>
 				<p>Deadline: {{ task.deadline }}</p>
 				<p>Created at: {{ task.created_at }}</p>
+				<p class="text-muted">
+					Tags:
+					{% for tag in task.tags.all %}
+						{{ tag }}
+					{% endfor %}
+				</p>
+				<a href="{% url 'todo:task-update' pk=task.id %}">Update</a>
 
 			</div>
 		{% endfor %}
