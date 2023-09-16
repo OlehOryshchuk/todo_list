@@ -10,10 +10,21 @@
       crossorigin="anonymous">
 </head>
 <body>
-  {% include 'includes/navigation.html' %}
+  <div class="container-fluid">
+    <div class="row">
 
-  {% block content %}{% endblock %}
+      <div class="col-sm-3">
+        {% include 'includes/navigation.html' %}
+      </div>
+      <div class="col-sm-9">
+        {% block content %}{% endblock %}
 
-  {% include 'includes/pagination.html' %}
+        {% include 'includes/pagination.html' %}
+      </div>
+
+    </div>
+
+  </div>
+
 </body>
 </html>
