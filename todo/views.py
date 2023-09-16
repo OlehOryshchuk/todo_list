@@ -4,7 +4,8 @@ from django.views import generic
 
 from .models import Task, Tag
 from .form import (
-    TaskCreateForm
+    TaskCreateForm,
+    TaskUpdateForm
 )
 
 
@@ -16,6 +17,14 @@ class TaskListView(generic.ListView):
 class TaskCreateView(generic.CreateView):
     model = Task
     form_class = TaskCreateForm
+
+    def get_success_url(self):
+        return reverse_lazy("todo:task-list")
+
+
+class TaskUpdateView(generic.UpdateView):
+    model = Task
+    form_class = TaskUpdateForm
 
     def get_success_url(self):
         return reverse_lazy("todo:task-list")
