@@ -41,6 +41,7 @@
 					{% endfor %}
 				</p>
 				<a href="{% url 'todo:task-update' pk=task.id %}">Update</a>
+				<a href="{% url 'todo:task-delete' pk=task.id %}">Delete</a>
 
 			</div>
 		{% endfor %}
