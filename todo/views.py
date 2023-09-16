@@ -1,9 +1,21 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import generic
 
 from .models import Task, Tag
+from .form import (
+    TaskCreateForm
+)
 
 
 class TaskListView(generic.ListView):
     model = Task
     queryset = Task.objects.prefetch_related("tags")
+
+
+class TaskCreateView(generic.CreateView):
+    model = Task
+    form_class = TaskCreateForm
+
+    def get_success_url(self):
+        return reverse_lazy("todo:task-list")
