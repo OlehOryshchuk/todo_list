@@ -17,9 +17,10 @@
 				{% if task.is_completed %}
 					<div class="d-flex justify-content-between align-items-center">
 							<h3>{{ task.name }} <span class="text-success">Done</span> </h3>
-							<span class="text-right btn btn-primary">
-							<a href="{% url 'todo:task-list' %}?is_completed=False&task={{ task.id }}">Undone</a>
-							</span>
+							<a
+								class="text-right btn btn-danger"
+								href="{% url 'todo:task-list' %}?is_completed=False&task={{ task.id }}"
+							>Undone</a>
 					</div>
 				{% else %}
 					<div class="d-flex justify-content-between align-items-center">
