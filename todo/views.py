@@ -11,7 +11,24 @@ from .form import (
 
 class TaskListView(generic.ListView):
     model = Task
-    queryset = Task.objects.prefetch_related("tags")
+
+    def get_queryset(self):
+        queryset = Task.objects.prefetch_related("tags")
+
+        is_completed = self.request.GET.get("is_completed")
+        task = self.request.GET.get("task")
+
+        update_task = Task.objects.filter(id=task).first()
+
+        if update_task:
+            if is_completed == "True":
+                update_task.is_completed = True
+            elif is_completed == "False":
+                update_task.is_completed = False
+
+            update_task.save()
+
+        return queryset
 
 
 class TaskCreateView(generic.CreateView):
