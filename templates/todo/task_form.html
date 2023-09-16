@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load crispy_forms_filters %}
 
+{% block title %}
+	{{ object|yesno:"Update,Create" }}
+{% endblock %}
+
 {% block content %}
   <div class="mt-8">
 		<form action="" method="post" novalidate>
