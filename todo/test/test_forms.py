@@ -34,3 +34,17 @@ class TaskFormTest(TestCase):
 
         self.assertIn('type="date"', rendered_form)
         self.assertIn('type="hidden" name="is_completed"', rendered_form)
+
+    def test_task_update_form_fields(self):
+        expected_fields = [
+            "name",
+            "description",
+            "deadline",
+            "is_completed",
+            "tags",
+        ]
+
+        self.assertEqual(
+            list(self.update_task_form.fields.keys()),
+            expected_fields
+        )
