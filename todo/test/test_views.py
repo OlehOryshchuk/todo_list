@@ -102,3 +102,23 @@ class TaskViewTest(TestCase):
         )
         self.task.refresh_from_db()
         self.assertEqual(self.task.name, form_data["name"])
+
+    def test_task_delete_view(self):
+        task1 = Task.objects.create(
+            name="task1",
+            deadline=date.today()
+        )
+
+        url = reverse("todo:task-delete", args=[task1.id])
+
+        response = self.client.post(url)
+
+        self.assertRedirects(
+            response,
+            reverse("todo:task-list"),
+            target_status_code=200,
+            status_code=302,
+        )
+        tasks = Task.objects.all()
+
+        self.assertNotIn(task1, tasks)
