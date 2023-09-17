@@ -1,10 +1,10 @@
-from datetime import date, datetime
+from datetime import date
 from django.test import TestCase
 from django.shortcuts import reverse
 from django.contrib.auth import get_user_model
 
 from ..models import Task, Tag
-from ..admin import TaskAdmin, TagAdmin
+from ..admin import TaskAdmin
 
 
 class AdminSiteTest(TestCase):
@@ -89,4 +89,3 @@ class AdminSiteTest(TestCase):
 
         self.assertIn(self.tag, changelist.queryset)
         self.assertNotIn(tag1, changelist.queryset)
-

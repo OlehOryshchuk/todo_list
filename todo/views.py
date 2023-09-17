@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -12,7 +11,6 @@ from .form import (
 class TaskListView(generic.ListView):
     model = Task
     paginate_by = 5
-
 
     def get_queryset(self):
         queryset = Task.objects.prefetch_related("tags")

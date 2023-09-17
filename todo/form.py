@@ -2,7 +2,7 @@ from datetime import date
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Task, Tag
+from .models import Task
 
 
 class TaskCreateForm(forms.ModelForm):
