@@ -70,3 +70,10 @@ class AdminSiteTest(TestCase):
 
         self.assertIn(self.task, changelist.queryset)
         self.assertNotIn(task1, changelist.queryset)
+
+    def test_tag_admin_site_list_page(self):
+        url = reverse("admin:todo_tag_changelist")
+
+        response = self.client.get(url)
+
+        self.assertContains(response, self.tag.name)
