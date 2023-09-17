@@ -172,3 +172,21 @@ class TestTagView(TestCase):
         self.assertNotEqual(response.status_code, 302)
         with self.assertRaises(Tag.DoesNotExist):
             Tag.objects.get(name=form_data["name"])
+
+    def test_tag_update_view(self):
+        form_data = {
+            "name": "Main MAin Tag",
+        }
+
+        url = reverse("todo:tag-update", args=[self.tag.id])
+
+        response = self.client.post(url, data=form_data)
+
+        self.assertRedirects(
+            response,
+            reverse("todo:tag-list"),
+            target_status_code=200,
+            status_code=302,
+        )
+        self.tag.refresh_from_db()
+        self.assertEqual(self.tag.name, form_data["name"])
