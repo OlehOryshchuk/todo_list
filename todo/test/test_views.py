@@ -161,3 +161,14 @@ class TestTagView(TestCase):
             status_code=302,
         )
         self.assertTrue(Tag.objects.get(name=form_data["name"]))
+
+    def test_task_create_invalid_tag_without_name(self):
+        form_data = {
+            "name": ""
+        }
+
+        response = self.client.post(TAG_CREATE_URL, data=form_data)
+
+        self.assertNotEqual(response.status_code, 302)
+        with self.assertRaises(Tag.DoesNotExist):
+            Tag.objects.get(name=form_data["name"])
