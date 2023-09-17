@@ -48,3 +48,10 @@ class TaskFormTest(TestCase):
             list(self.update_task_form.fields.keys()),
             expected_fields
         )
+
+    def test_task_update_form_fields_widgets(self):
+        rendered_form = self.update_task_form.as_table()
+
+        self.assertIn('type="date"', rendered_form)
+        self.assertIn('type="checkbox" name="is_completed"', rendered_form)
+
