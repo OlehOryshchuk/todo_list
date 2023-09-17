@@ -29,3 +29,8 @@ class TaskFormTest(TestCase):
             expected_fields
         )
 
+    def test_task_create_form_fields_widgets(self):
+        rendered_form = self.create_task_form.as_table()
+
+        self.assertIn('type="date"', rendered_form)
+        self.assertIn('type="hidden" name="is_completed"', rendered_form)
