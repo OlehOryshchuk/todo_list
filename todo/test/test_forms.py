@@ -1,6 +1,6 @@
-from datetime import date, datetime
+from datetime import date, timedelta
 from django.test import TestCase
-from django.shortcuts import reverse
+from django.core.exceptions import ValidationError
 
 from ..form import (
     TaskUpdateForm,
@@ -55,3 +55,22 @@ class TaskFormTest(TestCase):
         self.assertIn('type="date"', rendered_form)
         self.assertIn('type="checkbox" name="is_completed"', rendered_form)
 
+    def test_task_validate_deadline_function_in_future(self):
+        future_date = date.today() + timedelta(days=1)
+
+        result = validate_deadline(future_date)
+
+        self.assertEqual(result, future_date)
+
+    def test_task_validate_deadline_function_in_past(self):
+        past_date = date.today() - timedelta(days=1)
+
+        with self.assertRaises(ValidationError):
+            validate_deadline(past_date)
+
+    def test_task_validate_deadline_function_date_today(self):
+        today_date = date.today()
+
+        result = validate_deadline(today_date)
+
+        self.assertEqual(result, today_date)
