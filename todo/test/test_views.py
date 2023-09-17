@@ -40,3 +40,19 @@ class TaskViewTest(TestCase):
             response,
             "todo/task_list.html"
         )
+
+    def test_task_create_valid_task(self):
+        form_data = {
+            "name": "Task1",
+            "description": "This is task1",
+            "deadline": date.today(),
+        }
+
+        response = self.client.post(TASK_CREATE_URL, data=form_data)
+
+        self.assertRedirects(
+            response,
+            reverse("todo:task-list"),
+            target_status_code=200,
+            status_code=302,
+        )
