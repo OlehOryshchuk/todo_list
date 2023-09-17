@@ -15,7 +15,6 @@ class TaskCreateForm(forms.ModelForm):
             }
             ),
             "is_completed": forms.HiddenInput(),
-            "created_at": forms.HiddenInput()
         }
 
     def clean_deadline(self):
