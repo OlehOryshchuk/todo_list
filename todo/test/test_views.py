@@ -122,3 +122,27 @@ class TaskViewTest(TestCase):
         tasks = Task.objects.all()
 
         self.assertNotIn(task1, tasks)
+
+
+class TestTagView(TestCase):
+    def setUp(self) -> None:
+        self.tag = Tag.objects.create(name="MainTag")
+
+        self.paginated_by = 5
+
+    def test_tag_list_page(self):
+        for i in range(11):
+            Tag.objects.create(name=f"tag{i}")
+
+        response = self.client.get(TAG_LIST_URL)
+
+        tag = Tag.objects.all()[:self.paginated_by]
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context.get("tag_list")),
+            list(tag)
+        )
+        self.assertTemplateUsed(
+            response,
+            "todo/tag_list.html"
+        )
