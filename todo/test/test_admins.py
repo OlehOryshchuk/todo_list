@@ -37,3 +37,18 @@ class AdminSiteTest(TestCase):
 
         self.assertIn("deadline", TaskAdmin.list_display)
         self.assertIn("created_at", TaskAdmin.list_display)
+
+    def test_task_admin_list_page_search_bar(self):
+        new_task = Task.objects.create(
+            name="Task1",
+            deadline=date.today(),
+        )
+
+        url = reverse("admin:todo_task_changelist")
+
+        response = self.client.get(url, {"q": self.task.name})
+
+        change_list = response.context.get("cl")
+
+        self.assertIn(self.task, change_list.queryset)
+        self.assertNotIn(new_task, change_list.queryset)
