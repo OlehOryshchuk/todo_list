@@ -146,3 +146,18 @@ class TestTagView(TestCase):
             response,
             "todo/tag_list.html"
         )
+
+    def test_task_create_valid_task(self):
+        form_data = {
+            "name": "Tag1",
+        }
+
+        response = self.client.post(TAG_CREATE_URL, data=form_data)
+
+        self.assertRedirects(
+            response,
+            reverse("todo:tag-list"),
+            target_status_code=200,
+            status_code=302,
+        )
+        self.assertTrue(Tag.objects.get(name=form_data["name"]))
