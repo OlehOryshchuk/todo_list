@@ -77,3 +77,16 @@ class AdminSiteTest(TestCase):
         response = self.client.get(url)
 
         self.assertContains(response, self.tag.name)
+
+    def test_tag_admin_site_list_page_search_bar(self):
+        tag1 = Tag.objects.create(name="tag1")
+
+        url = reverse("admin:todo_tag_changelist")
+
+        response = self.client.get(url, {"q": self.tag.name})
+
+        changelist = response.context.get("cl")
+
+        self.assertIn(self.tag, changelist.queryset)
+        self.assertNotIn(tag1, changelist.queryset)
+
