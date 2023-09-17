@@ -52,3 +52,21 @@ class AdminSiteTest(TestCase):
 
         self.assertIn(self.task, change_list.queryset)
         self.assertNotIn(new_task, change_list.queryset)
+
+    def test_task_admin_list_page_filter_task_by_tag(self):
+        tag1 = Tag.objects.create(name="Tag1")
+        self.task.tags.add(tag1)
+
+        task1 = Task.objects.create(
+            name="task1",
+            deadline=date.today()
+        )
+
+        url = reverse("admin:todo_task_changelist")
+
+        response = self.client.get(url, {"tags__id__exact": tag1.id})
+
+        changelist = response.context.get("cl")
+
+        self.assertIn(self.task, changelist.queryset)
+        self.assertNotIn(task1, changelist.queryset)
