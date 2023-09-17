@@ -190,3 +190,20 @@ class TestTagView(TestCase):
         )
         self.tag.refresh_from_db()
         self.assertEqual(self.tag.name, form_data["name"])
+
+    def test_task_delete_view(self):
+        tag1 = Tag.objects.create(name="tag1")
+
+        url = reverse("todo:tag-delete", args=[tag1.id])
+
+        response = self.client.post(url)
+
+        self.assertRedirects(
+            response,
+            reverse("todo:tag-list"),
+            target_status_code=200,
+            status_code=302,
+        )
+        tags = Tag.objects.all()
+
+        self.assertNotIn(tag1, tags)
