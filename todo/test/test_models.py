@@ -16,3 +16,6 @@ class ModelTest(TestCase):
 
     def test_task_string_representation(self):
         self.assertEqual(str(self.task), f"{self.task.name}")
+
+    def test_tag_string_representation(self):
+        self.assertEqual(str(self.tag), f"{self.tag.name}")
