@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.shortcuts import reverse
 from django.urls import reverse_lazy
-from datetime import date
+from datetime import date, timedelta
 
 from ..models import Tag, Task
 
@@ -56,3 +56,24 @@ class TaskViewTest(TestCase):
             target_status_code=200,
             status_code=302,
         )
+
+    def test_task_create_invalid_task_wrong_deadline(self):
+        form_data = {
+            "name": "Task1",
+            "description": "This is task1",
+            "deadline": date.today() - timedelta(days=1),
+        }
+
+        response = self.client.post(TASK_CREATE_URL, data=form_data)
+
+        self.assertNotEqual(response.status_code, 302)
+
+    def test_task_create_invalid_task_without_name(self):
+        form_data = {
+            "description": "This is task1",
+            "deadline": date.today(),
+        }
+
+        response = self.client.post(TASK_CREATE_URL, data=form_data)
+
+        self.assertNotEqual(response.status_code, 302)
