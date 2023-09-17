@@ -56,6 +56,7 @@ class TaskViewTest(TestCase):
             target_status_code=200,
             status_code=302,
         )
+        self.assertTrue(Task.objects.get(name=form_data["name"]))
 
     def test_task_create_invalid_task_wrong_deadline(self):
         form_data = {
@@ -67,6 +68,8 @@ class TaskViewTest(TestCase):
         response = self.client.post(TASK_CREATE_URL, data=form_data)
 
         self.assertNotEqual(response.status_code, 302)
+        with self.assertRaises(Task.DoesNotExist):
+            Task.objects.get(name=form_data["name"])
 
     def test_task_create_invalid_task_without_name(self):
         form_data = {
@@ -77,3 +80,5 @@ class TaskViewTest(TestCase):
         response = self.client.post(TASK_CREATE_URL, data=form_data)
 
         self.assertNotEqual(response.status_code, 302)
+        with self.assertRaises(Task.DoesNotExist):
+            Task.objects.get(description=form_data["description"])
