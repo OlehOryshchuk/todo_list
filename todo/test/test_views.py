@@ -82,3 +82,23 @@ class TaskViewTest(TestCase):
         self.assertNotEqual(response.status_code, 302)
         with self.assertRaises(Task.DoesNotExist):
             Task.objects.get(description=form_data["description"])
+
+    def test_task_update_task_view(self):
+        form_data = {
+            "name": "Main MAin Task",
+            "description": "This is task1",
+            "deadline": date.today(),
+        }
+
+        url = reverse("todo:task-update", args=[self.task.id])
+
+        response = self.client.post(url, data=form_data)
+
+        self.assertRedirects(
+            response,
+            reverse("todo:task-list"),
+            target_status_code=200,
+            status_code=302,
+        )
+        self.task.refresh_from_db()
+        self.assertEqual(self.task.name, form_data["name"])
