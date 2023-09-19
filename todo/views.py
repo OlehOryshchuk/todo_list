@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 from django.views import generic
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Task, Tag
 from .form import (
@@ -45,6 +46,24 @@ class TaskUpdateView(generic.UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("todo:task-list")
+
+    def post(self, request, *args, **kwargs):
+        task = get_object_or_404(Task, pk=kwargs.get("pk"))
+
+        task_form = TaskUpdateForm(
+            instance=task,
+            data=self.request.POST
+        )
+
+        if task_form.is_valid():
+            task_form.save()
+            return redirect("todo:task-list")
+        else:
+            return render(
+                self.request,
+                "todo/task_form.html",
+                {"form": task_form, "task": task}
+            )
 
 
 class TaskDeleteView(generic.DeleteView):
