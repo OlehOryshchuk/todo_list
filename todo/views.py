@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from django.views import generic
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 
 from .models import Task, Tag
 from .form import (
@@ -12,58 +12,35 @@ from .form import (
 class TaskListView(generic.ListView):
     model = Task
     paginate_by = 5
+    queryset = Task.objects.prefetch_related("tags")
 
-    def get_queryset(self):
-        queryset = Task.objects.prefetch_related("tags")
+    def post(self, request, *args, **kwargs):
+        task_id = request.POST.get("task")
+        is_completed = request.POST.get("is_completed")
 
-        is_completed = self.request.GET.get("is_completed")
-        task = self.request.GET.get("task")
+        task = get_object_or_404(Task, pk=task_id)
 
-        update_task = Task.objects.filter(id=task).first()
+        if is_completed == "True":
+            task.is_completed = True
 
-        if update_task:
-            if is_completed == "True":
-                update_task.is_completed = True
-            elif is_completed == "False":
-                update_task.is_completed = False
+        elif is_completed == "False":
+            task.is_completed = False
 
-            update_task.save()
+        task.save()
 
-        return queryset
+        return redirect("todo:task-list")
 
 
 class TaskCreateView(generic.CreateView):
     model = Task
     form_class = TaskCreateForm
-
-    def get_success_url(self):
-        return reverse_lazy("todo:task-list")
+    success_url = reverse_lazy("todo:task-list")
 
 
 class TaskUpdateView(generic.UpdateView):
     model = Task
     form_class = TaskUpdateForm
-
-    def get_success_url(self):
-        return reverse_lazy("todo:task-list")
-
-    def post(self, request, *args, **kwargs):
-        task = get_object_or_404(Task, pk=kwargs.get("pk"))
-
-        task_form = TaskUpdateForm(
-            instance=task,
-            data=self.request.POST
-        )
-
-        if task_form.is_valid():
-            task_form.save()
-            return redirect("todo:task-list")
-        else:
-            return render(
-                self.request,
-                "todo/task_form.html",
-                {"form": task_form, "task": task}
-            )
+    success_url = reverse_lazy("todo:task-list")
 
 
 class TaskDeleteView(generic.DeleteView):
