@@ -1,0 +1,2 @@
+[flake8]
+exclude = */migrations/*, todo_list/settings.py

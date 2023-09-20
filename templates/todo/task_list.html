@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Home page
+{% endblock title %}
+
+{% block content %}
+	<div class="d-flex justify-content-between align-items-center">
+		<h1>TODO list</h1>
+		<a href="{% url 'todo:task-create' %}" class="btn btn-primary mr-5">Create</a>
+	</div>
+	<hr>
+
+  <div class="container">
+		{% for task in task_list %}
+			<div>
+				{% if task.is_completed %}
+					<div class="d-flex justify-content-between align-items-center">
+							<h3>{{ task.name }} <span class="text-success">Done</span> </h3>
+								<form action="" method="post">
+									{% csrf_token %}
+
+									<input type="hidden" name="is_completed" value="False">
+									<input type="hidden" name="task" value="{{ task.id }}">
+
+									<input type="submit" value="Undone" class="btn btn-danger">
+								</form>
+					</div>
+				{% else %}
+					<div class="d-flex justify-content-between align-items-center">
+							<h3>{{ task.name }} <span class="text-danger">Undone</span> </h3>
+							<form action="" method="post">
+								{% csrf_token %}
+
+								<input type="hidden" name="is_completed" value="True">
+								<input type="hidden" name="task" value="{{ task.id }}">
+
+								<input type="submit" value="Complete" class="btn btn-success">
+							</form>
+					</div>
+				{% endif %}
+				<h5>{{ task.description }}</h5>
+				<p>Deadline: {{ task.deadline }}</p>
+				<p>Created at: {{ task.created_at }}</p>
+				<p class="text-muted">
+					Tags:
+					{% for tag in task.tags.all %}
+						{{ tag }}
+					{% endfor %}
+				</p>
+				<a href="{% url 'todo:task-update' pk=task.id %}">Update</a>
+				<a href="{% url 'todo:task-delete' pk=task.id %}">Delete</a>
+
+			</div>
+			<hr>
+		{% endfor %}
+
+	</div>
+
+{% endblock content %}
