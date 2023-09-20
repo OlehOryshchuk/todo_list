@@ -17,18 +17,26 @@
 				{% if task.is_completed %}
 					<div class="d-flex justify-content-between align-items-center">
 							<h3>{{ task.name }} <span class="text-success">Done</span> </h3>
-							<a
-								class="text-right btn btn-danger"
-								href="{% url 'todo:task-list' %}?is_completed=False&task={{ task.id }}"
-							>Undone</a>
-					</div>{% else %}
+								<form action="" method="post">
+									{% csrf_token %}
+
+									<input type="hidden" name="is_completed" value="False">
+									<input type="hidden" name="task" value="{{ task.id }}">
+
+									<input type="submit" value="Undone" class="btn btn-danger">
+								</form>
+					</div>
+				{% else %}
 					<div class="d-flex justify-content-between align-items-center">
 							<h3>{{ task.name }} <span class="text-danger">Undone</span> </h3>
-							<a
-								href="{% url 'todo:task-list' %}?is_completed=True&task={{ task.id }}"
-								class="btn btn-success"
-							>
-								Complete</a>
+							<form action="" method="post">
+								{% csrf_token %}
+
+								<input type="hidden" name="is_completed" value="True">
+								<input type="hidden" name="task" value="{{ task.id }}">
+
+								<input type="submit" value="Complete" class="btn btn-success">
+							</form>
 					</div>
 				{% endif %}
 				<h5>{{ task.description }}</h5>
